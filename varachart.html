@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ভাড়া চার্ট</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            font-size: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pay-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        .pay-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>আমি যাত্রী</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="ক্রমিক নাম্বার দিয়ে সার্চ করুন..." onkeyup="searchTable()">
+        </div>
+
+        <div class="table-container">
+            <table id="fareTable">
+                <thead>
+                    <tr>
+                        <th>ক্রমিক নং</th>
+                        <th>স্থান</th>
+                        <th>গন্তব্য</th>
+                        <th>মাধ্যম</th>
+                        <th>দূরত্ব (কিমি)</th>
+                        <th>ভাড়া (৳)</th>
+                        <th>পেমেন্ট</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>ঢাকা</td>
+                        <td>চট্টগ্রাম</td>
+                        <td>বাস</td>
+                        <td>250</td>
+                        <td>500</td>
+                        <td><button class="pay-button" onclick="payFare(1)">পে করুন</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>ঢাকা</td>
+                        <td>কক্সবাজার</td>
+                        <td>ট্রেন</td>
+                        <td>400</td>
+                        <td>800</td>
+                        <td><button class="pay-button" onclick="payFare(2)">পে করুন</button></td>
+                    </tr>
+                    <!-- আরও তালিকা যোগ করতে পারেন -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('fareTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName('td')[0];
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function payFare(id) {
+            // পেমেন্ট লজিক এখানে যুক্ত করতে হবে (ভবিষ্যতে ব্যাকএন্ডের জন্য প্রস্তুত)
+            alert('পেমেন্ট সফল হয়েছে');
+        }
+    </script>
+</body>
+</html>

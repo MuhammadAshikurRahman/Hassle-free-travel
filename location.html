@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Location</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            flex-direction: column;
+        }
+        .location {
+            font-size: 1.7em;
+            text-align: center;
+            color: rgb(0, 0, 0);
+            padding: 20px;
+            margin-top: 50px;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            font-size: 20px;
+            text-align: center;
+        }
+        p{
+            margin-top: 40px;
+            font-size: 30px;
+            font-family: 'Hind Siliguri', sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>আমি যাত্রী</h1>
+    </header>
+
+    <div class="text">
+        <p>আপনার বর্তমান লোকেশন চেক করে নিন</p>
+    </div>
+
+    <div class="location" id="location">Fetching location...</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // চেক করা হচ্ছে ব্রাউজার জিওলোকেশন সাপোর্ট করে কিনা
+            if ('geolocation' in navigator) {
+                // প্রতিবার অবস্থান পরিবর্তনের সাথে সাথে লোকেশন আপডেট করা
+                navigator.geolocation.watchPosition(
+                    updateLocation,
+                    handleError,
+                    { enableHighAccuracy: true, maximumAge: 1000 }
+                );
+                // প্রতি মিনিটে লোকেশন আপডেট করা
+                setInterval(() => {
+                    navigator.geolocation.getCurrentPosition(
+                        updateLocation,
+                        handleError,
+                        { enableHighAccuracy: true, maximumAge: 1000 }
+                    );
+                }, 60000); // 60000 মিলিসেকেন্ড = 1 মিনিট
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        });
+
+        function updateLocation(position) {
+            // জিপিএস অবস্থান থেকে ল্যাটিচিউড এবং লংিচিউড পাওয়া হচ্ছে
+            const { latitude, longitude } = position.coords;
+            // Nominatim API ব্যবহার করে লোকেশন তথ্য সংগ্রহ করা হচ্ছে
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+                .then(response => response.json())
+                .then(data => {
+                    // লোকেশন তথ্য প্রদর্শন করা হচ্ছে
+                    document.getElementById('location').textContent = data.display_name;
+                })
+                .catch(error => {
+                    console.error('Error fetching location:', error);
+                    document.getElementById('location').textContent = 'Unable to fetch location';
+                });
+        }
+
+        function handleError(error) {
+            // জিওলোকেশন ত্রুটি হ্যান্ডেল করা হচ্ছে
+            console.error('Geolocation error:', error);
+            document.getElementById('location').textContent = 'Unable to fetch location';
+        }
+    </script>
+</body>
+</html>

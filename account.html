@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ব্যবহারকারীর অ্যাকাউন্ট</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            font-size: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .account-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .account-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .account-info img {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .account-info p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .recharge-button, .logout-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: calc(100% - 40px);
+            max-width: 200px;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        .logout-button {
+            background-color: #f44336;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .recharge-button:hover {
+            background-color: #3e8e41;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>আমি যাত্রী</h1>
+    </header>
+
+    <div class="account-container">
+        <div class="account-info">
+            <img src="img/account.jpg" alt="User Image" id="userImage">
+            <p><strong>User ID:</strong> <span id="userId">123456</span></p>
+            <p><strong>Name:</strong> <span id="userName">জন ডো</span></p>
+            <p><strong>Phone:</strong> <span id="userPhone">0123456789</span></p>
+            <p><strong>Email:</strong> <span id="userEmail">example@example.com</span></p>
+            <p><strong>Address:</strong> <span id="userAddress">123, ABC রোড, ঢাকা</span></p>
+            <p><strong>Balance:</strong> <span id="userBalance">৳5000</span></p>
+        </div>
+
+        <button class="recharge-button" onclick="rechargeBalance()">ব্যালেন্স রিচার্জ করুন</button>
+        <button class="logout-button" onclick="logout()">লগআউট</button>
+    </div>
+
+    <script>
+        // ফাংশন: লগআউট
+        function logout() {
+            // লগআউট লজিক এখানে যুক্ত করতে হবে (ভবিষ্যতে ব্যাকএন্ডের জন্য প্রস্তুত)
+            alert('লগআউট সফল হয়েছে');
+            // লগআউট হলে হোম পেজে রিডাইরেক্ট
+            window.location.href = 'login.html';
+        }
+
+        // ফাংশন: ব্যালেন্স রিচার্জ
+        function rechargeBalance() {
+            const rechargeAmount = prompt("Enter amount to recharge:");
+            const userBalanceElement = document.getElementById('userBalance');
+            let currentBalance = parseFloat(userBalanceElement.textContent.replace('৳', ''));
+            
+            if (rechargeAmount && !isNaN(rechargeAmount) && rechargeAmount > 0) {
+                currentBalance += parseFloat(rechargeAmount);
+                userBalanceElement.textContent = `৳${currentBalance.toFixed(2)}`;
+                alert('ব্যালেন্স রিচার্জ সফল হয়েছে');
+            } else {
+                alert('সঠিক পরিমাণ দিন');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ড্রাইভার প্রোফাইল</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            max-width: 600px;
+            width: 90%;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .profile h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .profile p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .profile .edit-profile {
+            margin-top: 20px;
+        }
+
+        .edit-profile button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .profile img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ড্রাইভার প্রোফাইল</h1>
+    </header>
+
+    <div class="profile">
+        <img src="img/account.jpg" alt="ড্রাইভারের চিত্র">
+        <h2>নাম: জনাব আহমেদ</h2>
+        <p>বয়স: ৩০ বছর</p>
+        <p>রক্তের গ্রুপ: A+</p>
+        <p>গাড়ির ধরন: সেদান</p>
+        <p>গাড়ির রেজিস্ট্রেশন নম্বর: DH 1234567</p>
+        <p>একাউন্ট নম্বর: ১২৩৪৫৬৭৮৯০</p>
+        <p>রেজিস্ট্রেশনের তারিখ: ২০২০-০১-০১</p>
+        <p>আজকের আয়: ৳ 2000</p>
+        
+        <div class="edit-profile">
+            <button onclick="editProfile()">প্রোফাইল সম্পাদনা করুন</button>
+        </div>
+    </div>
+
+    <script>
+        function editProfile() {
+            // Implement logic to edit profile (e.g., navigate to edit page)
+            alert('প্রোফাইল সম্পাদনা পৃষ্ঠায় নিয়ে যাও।');
+            // You can add JavaScript code here to navigate to the edit profile page
+        }
+    </script>
+</body>
+</html>

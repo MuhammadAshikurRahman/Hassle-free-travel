@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমি চালক - প্রয়োজনীয় তথ্য</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            max-width: 600px;
+            width: 90%;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .controls input, .controls button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Hind Siliguri', sans-serif;
+            
+        }
+
+        .otp-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 10px;
+        }
+
+        .payment-details {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .payment-details p {
+            margin: 10px;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+
+        .income {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .controls input, .controls button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>রাইড এবং পেমেন্ট</h1>
+    </header>
+
+    <div class="content">
+        <p>আপনার গাড়ির রাইড শুরু করতে OTP দিন:</p>
+        <input type="text" id="otpInput" class="otp-input" placeholder="আপনার OTP দিন">
+        <div class="controls">
+            <button onclick="startRide()">রাইড শুরু</button>
+            <button onclick="stopRide()">রাইড স্টপ</button>
+        </div>
+
+        <div class="payment-details">
+            <h2>পেমেন্ট বিস্তারিত:</h2>
+            <div>
+                <img src="img/qr.png" alt="QR কোড" class="qr-code">
+            </div>
+            <p>একাউন্ট নম্বর: <span id="accountNumber">ashik905678</span></p>
+            <p>আজকের আয়: <span id="todaysIncome">৳ 0</span></p>
+        </div>
+    </div>
+
+    <script>
+        let rideStarted = false;
+
+        function startRide() {
+            const otpInput = document.getElementById('otpInput').value;
+            // Here you can verify OTP using backend logic or simulate it
+            if (otpInput.trim() !== '') {
+                alert('রাইড শুরু হয়েছে!');
+                rideStarted = true;
+            } else {
+                alert('দয়া করে একটি বৈধ OTP দিন।');
+            }
+        }
+
+        function stopRide() {
+            if (rideStarted) {
+                alert('রাইড স্টপ হয়েছে! , এখন আমাকে পেমেন্ট করুন');
+                rideStarted = false;
+                // Calculate distance and update income if needed
+                const distanceTraveled = calculateDistance();
+                const todaysIncome = calculateIncome(distanceTraveled);
+                updateIncomeDisplay(todaysIncome);
+            } else {
+                alert('প্রথমে রাইড শুরু করুন।');
+            }
+        }
+
+        function calculateDistance() {
+            // Example function to calculate distance, replace with actual logic
+            return Math.floor(Math.random() * 20) + 1; // Random distance between 1 to 20 km
+        }
+
+        function calculateIncome(distance) {
+            // Example function to calculate income based on distance traveled
+            const ratePerKm = 10; // Assume rate is 10 tk per km
+            return distance * ratePerKm;
+        }
+
+        function updateIncomeDisplay(income) {
+            // Update income display
+            document.getElementById('todaysIncome').textContent = `৳ ${income}`;
+        }
+    </script>
+</body>
+</html>

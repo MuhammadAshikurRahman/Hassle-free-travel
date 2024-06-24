@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লগইন</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 90%;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: left;
+            
+        }
+
+        .login-container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .login-container label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .login-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .login-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .login-container input, .login-container select, .login-container button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>লগইন</h1>
+    </header>
+
+    <div class="login-container">
+        <h2>লগইন</h2>
+        <label for="userType">আপনি:</label>
+        <select id="userType">
+            <option value="passenger">যাত্রী</option>
+            <option value="driver">ড্রাইভার</option>
+        </select>
+
+        <label for="userId">আইডি:</label>
+        <input type="text" id="userId" name="userId" value="12345">
+
+        <label for="password">পাসওয়ার্ড:</label>
+        <input type="password" id="password" name="password" value="12345">
+
+        <button onclick="login()">লগইন</button>
+    </div>
+
+    <script>
+        function login() {
+            const userType = document.getElementById('userType').value;
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+
+            if (userId === '12345' && password === '12345') {
+                if (userType === 'passenger') {
+                    window.location.href = 'jartihome.html';
+                } else if (userType === 'driver') {
+                    window.location.href = 'driverhome.html';
+                }
+            } else {
+                alert('ভুল আইডি অথবা পাসওয়ার্ড');
+            }
+        }
+    </script>
+</body>
+</html>

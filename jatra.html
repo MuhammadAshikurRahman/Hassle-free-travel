@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমি যাত্রী - যাত্রা করি</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px;
+            
+        }
+        .button-container button, .button-container input {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 25px;
+        }
+        .button-container button:hover, .button-container input:hover {
+            background-color: #3e8e41;
+        }
+        .map {
+            height: 400px;
+            width: 90%;
+            margin: 20px auto;
+            border: 2px solid #000;
+            border-radius: 4px;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 45px;
+            font-size: 20px;
+        
+        }
+        .payment-message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #ed570b;
+            color: rgb(15, 15, 15);
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>আমি যাত্রী</h1>
+</div>
+
+<div class="map" id="map"></div>
+
+<div class="button-container">
+    <button id="myPositionButton">আমার বর্তমান লোকেশন দেখুন</button>
+    <input type="text" id="vehicleCodeInput" placeholder="গাড়ির কোড দিন" style="display:none;">
+    <button id="startButton">শুরু</button>
+    <button id="stopButton" style="display:none;">থামুন</button>
+    <button id="paymentButton" style="display:none;">পেমেন্ট</button>
+</div>
+
+<div class="result" id="result"></div>
+<div class="payment-message" id="paymentMessage"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var mymap = L.map('map').setView([23.8103, 90.4125], 13); // Initial map view (Dhaka coordinates)
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(mymap);
+
+    var myMarker;
+    var startMarker, endMarker;
+    var startLatLng, endLatLng;
+    var totalDistance = 0;
+    var watchId;
+    var vehicleCode;
+
+    const fareRates = {
+        1: 10,   // Rickshaw
+        2: 10,   // Rickshaw
+        3: 10,   // Rickshaw
+        4: 10,   // Rickshaw
+        5: 10,   // Rickshaw
+        6: 10,   // Rickshaw
+        7: 10,   // Rickshaw
+        8: 10,   // Rickshaw
+        9: 10,   // Rickshaw
+        10: 10,  // Rickshaw
+        11: 3,   // Auto
+        12: 3,   // Auto
+        13: 3,   // Auto
+        14: 3,   // Auto
+        15: 3,   // Auto
+        16: 3,   // Auto
+        17: 3,   // Auto
+        18: 3,   // Auto
+        19: 3,   // Auto
+        20: 3,   // Auto
+        21: 10,  // CNG
+        22: 10,  // CNG
+        23: 10,  // CNG
+        24: 10,  // CNG
+        25: 10,  // CNG
+        26: 10,  // CNG
+        27: 10,  // CNG
+        28: 10,  // CNG
+        29: 10,  // CNG
+        30: 10,  // CNG
+        31: 10,  // Bus
+        32: 10,  // Bus
+        33: 10,  // Bus
+        34: 10,  // Bus
+        35: 10,  // Bus
+        36: 10,  // Bus
+        37: 10,  // Bus
+        38: 10,  // Bus
+        39: 10,  // Bus
+        40: 10   // Bus
+    };
+
+    // Function to get current location and show on map
+    function showMyLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                // Remove previous marker if exists
+                if (typeof myMarker !== 'undefined') {
+                    mymap.removeLayer(myMarker);
+                }
+
+                mymap.setView([lat, lon], 13); // Set map view to current location
+
+                // Add marker for current location
+                myMarker = L.marker([lat, lon]).addTo(mymap)
+                    .bindPopup("<b>Your Location</b>").openPopup();
+            }, function (error) {
+                alert("Error retrieving current location");
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    // Function to start measuring distance
+    function startMeasurement() {
+        vehicleCode = document.getElementById('vehicleCodeInput').value;
+        if (!vehicleCode || !fareRates[vehicleCode]) {
+            alert("Please enter a valid vehicle code (1-40)");
+            return;
+        }
+
+        if (navigator.geolocation) {
+            watchId = navigator.geolocation.watchPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+                var currentLatLng = L.latLng(lat, lon);
+
+                if (!startLatLng) {
+                    startLatLng = currentLatLng;
+                    startMarker = L.marker(startLatLng).addTo(mymap)
+                        .bindPopup("<b>Start Point</b>").openPopup();
+                }
+
+                if (endLatLng) {
+                    totalDistance += endLatLng.distanceTo(currentLatLng);
+                }
+
+                endLatLng = currentLatLng;
+
+                if (typeof endMarker !== 'undefined') {
+                    mymap.removeLayer(endMarker);
+                }
+
+                endMarker = L.marker(endLatLng).addTo(mymap)
+                    .bindPopup("<b>Current Location</b><br>Distance: " + (totalDistance / 1000).toFixed(2) + " km").openPopup();
+
+                mymap.setView([lat, lon], 13);
+            }, function (error) {
+                alert("Error retrieving current location");
+            }, {
+                enableHighAccuracy: true
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    // Function to stop measuring distance
+    function stopMeasurement() {
+        if (watchId) {
+            navigator.geolocation.clearWatch(watchId);
+            var distanceKm = totalDistance / 1000;
+            var fare = distanceKm * fareRates[vehicleCode];
+            document.getElementById('result').innerHTML = "Selected Vehicle Code: " + vehicleCode + "<br>Distance Traveled: " + distanceKm.toFixed(2) + " km<br>Fare: " + fare.toFixed(2) + " TK";
+            document.getElementById('paymentButton').style.display = 'inline';
+        }
+    }
+
+    // Function to handle payment
+    function handlePayment() {
+        var paymentMessage = document.getElementById('paymentMessage');
+        var fare = document.getElementById('result').innerText.split('Fare: ')[1];
+        paymentMessage.innerText = "Payment of " + fare + " successful!";
+        paymentMessage.style.display = 'block';
+        setTimeout(function () {
+            paymentMessage.style.display = 'none';
+        }, 5000); // Hide the message after 5 seconds
+        resetCycle();
+    }
+
+    function resetCycle() {
+        document.getElementById('startButton').style.display = 'inline';
+        document.getElementById('stopButton').style.display = 'none';
+        document.getElementById('paymentButton').style.display = 'none';
+        document.getElementById('vehicleCodeInput').value = '';
+        document.getElementById('result').innerHTML = '';
+
+        // Enable refresh button after payment
+        window.onbeforeunload = null;
+    }
+
+    // Show current location when page loads
+    window.onload = function () {
+        showMyLocation();
+        // Disable refresh button until payment is made
+        window.onbeforeunload = function () {
+            return "You cannot refresh the page until the payment is made.";
+        };
+    };
+
+    // Show current location button handler
+    document.getElementById('myPositionButton').onclick = function () {
+        showMyLocation();
+    };
+
+    // Start measurement button handler
+    document.getElementById('startButton').onclick = function () {
+        document.getElementById('vehicleCodeInput').style.display = 'inline';
+        document.getElementById('vehicleCodeInput').focus();
+    };
+
+    // Handle enter key for vehicle code input
+    document.getElementById('vehicleCodeInput').onkeypress = function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('vehicleCodeInput').style.display = 'none';
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('stopButton').style.display = 'inline';
+            startMeasurement();
+        }
+    };
+
+    // Stop measurement button handler
+    document.getElementById('stopButton').onclick = function () {
+        stopMeasurement();
+        document.getElementById('stopButton').style.display = 'none';
+        document.getElementById('paymentButton').style.display = 'inline';
+    };
+
+    // Payment button handler
+    document.getElementById('paymentButton').onclick = function () {
+        handlePayment();
+    };
+</script>
+
+</body>
+</html>
+
