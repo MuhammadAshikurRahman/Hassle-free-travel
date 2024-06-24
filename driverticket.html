@@ -25,6 +25,23 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             text-align: center;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header .admin-login {
+            background-color: #f44336;
+            color: white;
+            padding:20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Hind Siliguri', sans-serif;
         }
 
         .ticket-management {
@@ -67,6 +84,12 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .ticket-management .fare-info {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
 
         @media (max-width: 600px) {
@@ -79,6 +102,7 @@
 <body>
     <header>
         <h1>টিকিট ম্যানেজমেন্ট</h1>
+        <button class="admin-login" onclick="adminLogin()">অ্যাডমিন লগইন</button>
     </header>
 
     <div class="ticket-management">
@@ -89,8 +113,29 @@
         <label for="seats">আসনের সংখ্যা:</label>
         <input type="number" id="seats" name="seats">
 
-        <label for="destination">গন্তব্য:</label>
-        <input type="text" id="destination" name="destination">
+        <label for="startPoint">যাত্রা শুরু হবে:</label>
+        <select id="startPoint" name="startPoint">
+            <option value="Dhaka">ঢাকা</option>
+            <option value="Chittagong">চট্টগ্রাম</option>
+            <option value="Khulna">খুলনা</option>
+            <option value="Rajshahi">রাজশাহী</option>
+            <option value="Barishal">বরিশাল</option>
+            <option value="Sylhet">সিলেট</option>
+            <option value="Rangpur">রংপুর</option>
+            <option value="Mymensingh">ময়মনসিংহ</option>
+        </select>
+
+        <label for="endPoint">গন্তব্য:</label>
+        <select id="endPoint" name="endPoint">
+            <option value="Dhaka">ঢাকা</option>
+            <option value="Chittagong">চট্টগ্রাম</option>
+            <option value="Khulna">খুলনা</option>
+            <option value="Rajshahi">রাজশাহী</option>
+            <option value="Barishal">বরিশাল</option>
+            <option value="Sylhet">সিলেট</option>
+            <option value="Rangpur">রংপুর</option>
+            <option value="Mymensingh">ময়মনসিংহ</option>
+        </select>
 
         <label for="price">মূল্য (৳):</label>
         <input type="number" id="price" name="price">
@@ -102,16 +147,22 @@
     </div>
 
     <script>
+        function adminLogin() {
+            // Redirect to admin login page
+            window.location.href = 'admin-login.html'; // Update this URL as necessary
+        }
+
         function saveTicket() {
             const date = document.getElementById('date').value;
             const seats = document.getElementById('seats').value;
-            const destination = document.getElementById('destination').value;
+            const startPoint = document.getElementById('startPoint').value;
+            const endPoint = document.getElementById('endPoint').value;
             const price = document.getElementById('price').value;
             const time = document.getElementById('time').value;
 
-            if (date && seats && destination && price && time) {
+            if (date && seats && startPoint && endPoint && price && time !== "") {
                 // Implement logic to save ticket details
-                alert(`টিকিট সংরক্ষিত হয়েছে:\nতারিখ: ${date}\nআসনের সংখ্যা: ${seats}\nগন্তব্য: ${destination}\nমূল্য: ${price}\nসময়: ${time}`);
+                alert(`টিকিট সংরক্ষিত হয়েছে:\nতারিখ: ${date}\nআসনের সংখ্যা: ${seats}\nযাত্রা শুরু হবে: ${startPoint}\nগন্তব্য: ${endPoint}\nমূল্য: ${price}\nসময়: ${time}`);
             } else {
                 alert('সব ফিল্ড পূরণ করুন');
             }
